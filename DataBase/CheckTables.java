@@ -8,26 +8,37 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class CheckTables extends ReturnedMessage {
+    //ResultSet sprawdzający czy zadane tabele istnieją
+    ResultSet checkUser = null;
+    ResultSet checkAdmn = null;
+    ResultSet checkCars = null;
+    ResultSet chceckCarsRent = null;
+    ResultSet checkKary = null;
+
     //Obiekt na polaczenie z baza danych
-    private final ConnectDataBase conn = new ConnectDataBase();
+    ConnectDataBase conn = new ConnectDataBase();
+
     //obiekt na inserty do poszczegolnych tabel
-    private final InsertsForTablesDB insertsForTablesDB = new InsertsForTablesDB();
+    InsertsForTablesDB insertsForTablesDB = new InsertsForTablesDB();
+
+    //Inicjacja statmentu
+    Statement stmt = null;
+
+
 
     public void checkDatabase(){
         try {
-            //Inicjacja statmentu
-            Statement stmt = conn.connect().createStatement();
+            stmt =conn.connect(). createStatement();
 
             DatabaseMetaData dbm = conn.connect().getMetaData();
 
             stmt.executeUpdate("USE wypozyczalnia");
 
-            //ResultSet sprawdzający czy zadane tabele istnieją
-            ResultSet checkUser = dbm.getTables(null, null, "Uzytkownicy", null);
-            ResultSet checkAdmn = dbm.getTables(null, null, "Admin", null);
-            ResultSet checkCars = dbm.getTables(null, null, "spis_samochodow", null);
-            ResultSet chceckCarsRent = dbm.getTables(null, null, "wypozyczenia_samochodow_przez_klientow", null);
-            ResultSet checkKary = dbm.getTables(null, null, "Kary", null);
+            checkUser = dbm.getTables(null, null, "Uzytkownicy", null);
+            checkAdmn = dbm.getTables(null, null, "Admin", null);
+            checkCars = dbm.getTables(null, null, "spis_samochodow", null);
+            chceckCarsRent = dbm.getTables(null, null, "wypozyczenia_samochodow_przez_klientow", null);
+            checkKary = dbm.getTables(null, null, "Kary", null);
 
             if (checkUser.next()) {
                 System.out.println("Table Uzytkownicy exists");
@@ -101,9 +112,7 @@ public class CheckTables extends ReturnedMessage {
 
             }
 
-            if(!super.checkClose(conn)){
-              System.err.println("Blad poczad rozlaczania z baza danych");
-            }
+            super.checkClose(conn);
 
         }catch (SQLException ex) {
 

@@ -9,12 +9,10 @@ import java.sql.Statement;
 public class CreateDatabase extends ReturnedMessage {
 
     public CreateDatabase() throws SQLException {
-
         ConnectDataBase conn = new ConnectDataBase();
         Statement stmt;
         ResultSet rs;
         String dbName = "wypozyczalnia";
-
         InsertsForTablesDB insertsForTablesDB = new InsertsForTablesDB();
         boolean exists = false;
 
@@ -41,7 +39,7 @@ public class CreateDatabase extends ReturnedMessage {
                         " Nazwisko VARCHAR(50), " +
                         " Login VARCHAR(20), " +
                         " Haslo VARCHAR(20), " +
-                        " Saldo double(7,2), " +
+                        " Saldo double(6,2), " +
                         " PRIMARY KEY ( id ))";
 
                 String adminTable = "CREATE TABLE Admin  " +
@@ -54,8 +52,8 @@ public class CreateDatabase extends ReturnedMessage {
 
                 String numberOfCars = "CREATE TABLE Spis_samochodow  " +
                         "(id INTEGER not NULL AUTO_INCREMENT, " +
-                        " Marka VARCHAR(100), " +
-                        " Model VARCHAR(100), " +
+                        " Marka VARCHAR(255), " +
+                        " Model VARCHAR(255), " +
                         " Cena INT, " +
                         " Dostepny varchar(1), " +
                         " PRIMARY KEY ( id ))";
@@ -87,12 +85,15 @@ public class CreateDatabase extends ReturnedMessage {
                 stmt.executeUpdate(karyTable);
                 insertsForTablesDB.insertKaryTable();
 
-                if(!super.checkClose(conn)){
-                    System.err.println("Blad poczad rozlaczania z baza danych");
-                }
+                super.checkClose(conn);
+
 
             }
 
         }
 
     }
+
+
+
+
